@@ -154,6 +154,10 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public string CreateNewFile(string path)
     {
+        if (!File.Exists(path))
+        {
+            File.Create(path);
+        }
         return path;
     }
     /// <summary>
@@ -165,10 +169,7 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public string AppendTextContent(string path, string content)
     {
-        if (File.Exists(path))
-        {
-            File.WriteAllText(path, content);
-        }
+        File.AppendAllText(path, content);
         return path;
     }
     /*
@@ -283,22 +284,50 @@ public class TestMethods : AssignmentBase
     [Assignment(13)]
     public void TestCreateFile()
     {
-        string filePath = "file.txt";
-        if (File.Exists(filePath))
+        string filePath = "test_file.txt";
+        try
         {
-            Assert.NotNull(CreateNewFile(filePath));
+            string result = CreateNewFile(filePath);
+            Assert.True(File.Exists(filePath));
+            Assert.Equal(filePath, result);
+            // if the file is empty, the content within should be a empty string
+            Assert.Equal(string.Empty, File.ReadAllText(filePath));
         }
-        else
+        catch (Exception e)
         {
-            throw new FileLoadException();
+            Console.WriteLine("Error:", e.Message);
+        }
+        finally
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
         }
     }
     [Assignment(14)]
     public void TestAppendTextContent()
     {
 
-        string filePath = "file.txt";
-        string textContent = "Hello, World!";
-        Assert.Equal(textContent, File.ReadAllText(AppendTextContent(filePath, textContent)));
+        string filePath = "test_append.txt";
+        string exisitingContent = "Hello, World!";
+        string textToAppend = "Hello, World!";
+        try
+        {
+            File.WriteAllText(filePath, exisitingContent);
+            string result = AppendTextContent(filePath, textToAppend);
+            // check wheter or not the file exists, rather than hardcoding the files we can do this within or I/O error-handler
+            Assert.True(File.Exists(filePath));
+            Assert.Equal(filePath, result);
+            string expectedContent = exisitingContent + textToAppend;
+            Assert.Equal(expectedContent, File.ReadAllText(filePath));
+        }
+        finally
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
     }
 }
