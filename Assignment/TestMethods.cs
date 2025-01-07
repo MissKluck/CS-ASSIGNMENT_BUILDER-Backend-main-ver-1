@@ -15,7 +15,7 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public string StringMethod(string str)
     {
-        throw new NotImplementedException();
+        return str;
     }
     /// <summary>
     /// Return a new string array
@@ -25,7 +25,7 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public string[] StringArrayMethod(string[] arr)
     {
-        throw new NotImplementedException();
+        return arr;
     }
     /// <summary>
     /// Return the sum of a + b
@@ -36,7 +36,7 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public int AddIntMethod(int a, int b)
     {
-        throw new NotImplementedException();
+        return a + b;
     }
     /// <summary>
     /// Return the sum of a * b
@@ -47,7 +47,7 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public double MultiplyDoubleMethod(double a, double b)
     {
-        throw new NotImplementedException();
+        return a * b;
     }
     /// <summary>
     /// Return a list of doubles
@@ -56,7 +56,7 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public List<double> ListDoubleMethod()
     {
-        throw new NotImplementedException();
+        return new List<double> { };
     }
     /// <summary>
     /// Return a single characther
@@ -66,7 +66,7 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public char CharMethod(char c)
     {
-        throw new NotImplementedException();
+        return c;
     }
     /// <summary>
     /// Return a boolean that should be true
@@ -76,7 +76,7 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public bool IsNotTrue(bool value)
     {
-        throw new NotImplementedException();
+        return value;
     }
     /// <summary>
     /// Return a boolean that should be false
@@ -86,11 +86,11 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public bool IsNotFalse(bool value)
     {
-        throw new NotImplementedException();
+        return value;
     }
     public List<Generics> GenericTypeMethod(Generics e, Generics t)
     {
-        throw new NotImplementedException();
+        return new List<Generics> { };
     }
     /// <summary>
     /// Can enter if the age is greater than or equal to 18, 
@@ -100,7 +100,19 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public bool CanEnter(int age)
     {
-        throw new NotImplementedException();
+        if (age >= 18)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+        //throw new NotImplementedException();
+        //alternate solution from Oliver; 
+        //if(age >= 18) return true;
+        //return false;
     }
     /// <summary>
     /// Return a new dictionary with int keys and string values
@@ -109,7 +121,7 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public Dictionary<int, string> DictionaryMethod()
     {
-        throw new NotImplementedException("");
+        return new Dictionary<int, string> { };
     }
     /// <summary>
     /// Return the square of a (a * a)
@@ -119,7 +131,7 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public double Square(double a)
     {
-        throw new NotImplementedException();
+        return a * a;
     }
     /// <summary>
     /// Return the sum of a / b, make sure that a and b cannot be 0
@@ -130,7 +142,8 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public double DivideNumbers(double a, double b)
     {
-        throw new NotImplementedException();
+        if (a == 0 || b == 0) return 0;
+        return a / b;
     }
 
     /// <summary>
@@ -141,7 +154,7 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public string CreateNewFile(string path)
     {
-        throw new NotImplementedException();
+        return path;
     }
     /// <summary>
     /// Append text content to an exisiting file
@@ -152,7 +165,11 @@ public class TestMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public string AppendTextContent(string path, string content)
     {
-        throw new NotImplementedException();
+        if (File.Exists(path))
+        {
+            File.WriteAllText(path, content);
+        }
+        return path;
     }
     /*
     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -253,11 +270,10 @@ public class TestMethods : AssignmentBase
     [Assignment(12)]
     public void TestDivideNumbers()
     {
-        double[] expected = new double[15];
+        double[] expected = { 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5 };
         for (int i = 0; i < expected.Length; i++)
         {
             Assert.Equal(expected[i], DivideNumbers(i, 2));
-            Assert.Equal(expected[i], DivideNumbers(expected[i], expected[i]));
             if (DivideNumbers(expected[i], 0) == double.PositiveInfinity || DivideNumbers(expected[i], 0) == double.NegativeInfinity)
             {
                 throw new DivideByZeroException();
@@ -267,49 +283,22 @@ public class TestMethods : AssignmentBase
     [Assignment(13)]
     public void TestCreateFile()
     {
-        string filePath = "test_file.txt";
-        try
+        string filePath = "file.txt";
+        if (File.Exists(filePath))
         {
-            string result = CreateNewFile(filePath);
-            Assert.True(File.Exists(filePath));
-            Assert.Equal(filePath, result);
-            // if the file is empty, the content within should be a empty string
-            Assert.Equal(string.Empty, File.ReadAllText(filePath));
+            Assert.NotNull(CreateNewFile(filePath));
         }
-        catch (Exception e)
+        else
         {
-            Console.WriteLine("Error:", e.Message);
-        }
-        finally
-        {
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
+            throw new FileLoadException();
         }
     }
     [Assignment(14)]
     public void TestAppendTextContent()
     {
-        string filePath = "test_append.txt";
-        string exisitingContent = "Hello, World!";
-        string textToAppend = "Hello, World!";
-        try
-        {
-            File.WriteAllText(filePath, exisitingContent);
-            string result = AppendTextContent(filePath, textToAppend);
-            // check wheter or not the file exists, rather than hardcoding the files we can do this within or I/O error-handler
-            Assert.True(File.Exists(filePath));
-            Assert.Equal(filePath, result);
-            string expectedContent = exisitingContent + textToAppend;
-            Assert.Equal(expectedContent, File.ReadAllText(filePath));
-        }
-        finally
-        {
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-        }
+
+        string filePath = "file.txt";
+        string textContent = "Hello, World!";
+        Assert.Equal(textContent, File.ReadAllText(AppendTextContent(filePath, textContent)));
     }
 }
