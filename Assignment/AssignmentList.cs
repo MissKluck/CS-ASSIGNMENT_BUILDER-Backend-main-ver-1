@@ -1,4 +1,5 @@
 using C_ASSIGNMENT_BUILDER.Engine.AssignmentBuilder;
+using Xunit.Sdk;
 namespace C_ASSIGNMENT_BUILDER.CurrentAssignment;
 
 /*
@@ -21,7 +22,8 @@ public class AssignmentList : AssignmentListBase
             typeof(TestMethods),
             typeof(TestDatastructures),
             typeof(TestArrayAndListMethods),
-            typeof(TDDTests)
+            typeof(TDDTests),
+            typeof(TestClass)
         ];
     }
 }
