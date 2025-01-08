@@ -43,6 +43,16 @@ public class TestClass : AssignmentBase
         throw new NotImplementedException();
     }
 
+    public int Divide(int a, int b)
+    {
+        return a / b;
+    }
+
+    public float returnFloat(float x)
+    {
+        return x;
+    }
+
     /*
     Tests
     */
@@ -71,6 +81,21 @@ public class TestClass : AssignmentBase
         string pikachu = "Pikachu";
         Assert.True(returnsTinkatonIfZero(0), tinkaton);
         Assert.False(returnsTinkatonIfZero(1), pikachu);
+    }
 
+    [Assignment(4)]
+    public void TestDivideNumbers()
+    {
+        Random random = new Random();
+        int r1 = random.Next(1, 30);
+        int r2 = random.Next(1, 30);
+        Assert.Equal(Divide(r1, r2), r1 / r2);
+    }
+
+    [Assignment(5)]
+    public void TestReturnFloat()
+    {
+        float num1 = 6.74F;
+        Assert.Equal(returnFloat(num1), num1);
     }
 }
