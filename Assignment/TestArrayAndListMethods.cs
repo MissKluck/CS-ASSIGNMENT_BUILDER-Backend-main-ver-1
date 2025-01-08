@@ -10,17 +10,17 @@ public class TestArrayAndListMethods : AssignmentBase
 {
     public string[] StringArray(string[] arr)
     {
-        throw new NotImplementedException();
+        return arr;
     }
 
     public int[] IntSum(int a, int b)
     {
-        throw new NotImplementedException();
+        return new int[a + b];
     }
 
     public List<string> LoopList(List<string> element)
     {
-        throw new NotImplementedException();
+        return new List<string>();
     }
     /// <summary>
     /// Implement a simple Dictionary method
@@ -30,12 +30,14 @@ public class TestArrayAndListMethods : AssignmentBase
     /// <exception cref="NotImplementedException"></exception>
     public Dictionary<int, string> LoopDict(Dictionary<int, string> element)
     {
-        throw new NotImplementedException();
+        return new Dictionary<int, string>(element);
     }
 
     public string ReverseString(string arr)
     {
-        throw new NotImplementedException();
+        char[] charArray = arr.ToCharArray();
+        Array.Reverse(charArray);
+        return new string(charArray);
     }
 
     /*
